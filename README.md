@@ -1,8 +1,8 @@
-# gremlin-scripts
+# Gremlin Groovy Scripts
 Apache Tinkerpop Gremlin useful scripts
 
 
-# Load scripts
+# How to load the scripts
 
 ### Syntax
 >:load {script_location.groovy}
