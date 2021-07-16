@@ -1,4 +1,7 @@
 from gremlin_python.driver import client
+from gremlin_python.driver import serializer
+from gremlin_python.process.anonymous_traversal import traversal
+from gremlin_python.driver.driver_remote_connection import DriverRemoteConnection
 
 import logging
 
@@ -32,6 +35,24 @@ def submit_script(script):
     return results
 
 def cli():
-    return client.Client('wss://{}:{}/gremlin'.format("localhost", "8080"), 'g');
+    return client.Client(connection_string(), 'g');
+
+def create_remote_connection():
+    return DriverRemoteConnection(
+        connection_string(),
+        'g',
+        pool_size=1,
+        message_serializer=serializer.GraphSONSerializersV2d0()
+    )
+
+def connection_string():
+    database_url = 'wss://{}:{}/gremlin'.format("localhost", "8080")
+    return database_url
+
+def create_graph_traversal_source(conn):
+    return traversal().withRemote(conn)
+
+conn = create_remote_connection()
+g = create_graph_traversal_source(conn)
 
 generate_recreate_vertex("1", "21")
